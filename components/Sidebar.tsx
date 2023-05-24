@@ -75,12 +75,6 @@ export default function Sidebar() {
             <span className="text-sm font-medium">Manage Products </span>
           </Link>
 
-          <Link
-            href="/add_product"
-            className="flex items-center gap-2 rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
-          >
-            <span className="text-sm font-medium">Add Products</span>
-          </Link>
         </nav>
       </details>
 
