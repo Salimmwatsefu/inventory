@@ -167,7 +167,9 @@ export default function ManageProducts() {
 
 
   return (
-    <div className='mt-10'>
+    <div >
+      <h1 className='my-5 text-center font-black text-4xl text-orange-600 tracking-wider uppercase'>ALL Products</h1>
+      <div className='mx-5'>
       <MaterialReactTable
         displayColumnDefOptions={{
           'mrt-row-actions': {
@@ -200,13 +202,13 @@ export default function ManageProducts() {
         )}
         renderTopToolbarCustomActions={() => (
           <button
-            className='bg-yellow-500 h-10 rounded-2xl hover:bg-yellow-700'
+            className=' bg-orange-500 h-10 rounded-2xl hover:bg-orange-700'
             onClick={() => setCreateModalOpen(true)}
           >
             <span className='mx-5 font-bold text-base uppercase'>Add New</span>
           </button>
         )}
-      />
+      /></div>
       <CreateNewAccountModal
         columns={columns}
         open={createModalOpen}

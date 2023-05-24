@@ -1,4 +1,6 @@
 import { Product } from "@/components/Products/ManageProducts";
+import { Sales } from "@/components/Sales/ManageSales";
+
 
 export const data: Product[] = [
   {
@@ -13,4 +15,18 @@ export const data: Product[] = [
   
   
 ];
+
+export const salesData: Sales[] = [
+    {
+      id: '1',
+      title: 'Kuku',
+      quantity: 20,
+      amount: 100,
+      date: "24th Feb 2023"
+    },
+    
+    
+    
+  ];
+  
 

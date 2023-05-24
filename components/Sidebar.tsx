@@ -1,39 +1,50 @@
 import React from 'react'
 import Link from 'next/link'
+import PeopleIcon from '@mui/icons-material/People';
+import InventoryIcon from '@mui/icons-material/Inventory';
+import PointOfSaleIcon from '@mui/icons-material/PointOfSale';
+import SummarizeIcon from '@mui/icons-material/Summarize';
+import TodayIcon from '@mui/icons-material/Today';
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import DateRangeIcon from '@mui/icons-material/DateRange';
+import DashboardIcon from '@mui/icons-material/Dashboard';
 
 export default function Sidebar() {
   return (
     <div className='fixed'>
-        <div className="flex h-screen flex-col justify-between border-e bg-white w-[200px]">
+        <div className="flex h-screen flex-col justify-between  bg-black w-[200px]">
   <div className="pb-6 ">
-    <div className='bg-gray-200 h-16'>
+    <div className='bg-black h-16'>
     <span
-      className="grid h-16  w-full place-content-center rounded-lg font-extrabold  text-2xl text-blue-600"
+      className="grid h-16 uppercase  w-full place-content-center rounded-lg font-extrabold  text-2xl text-orange-600"
     >
       Kuku Hub
     </span>
     </div>
 
-    <nav aria-label="Main Nav" className="mt-6 flex flex-col space-y-1">
+    <nav aria-label="Main Nav" className="mt-6 flex flex-col space-y-5">
       <Link
         href="/"
-        className="flex items-center gap-2 rounded-lg bg-gray-100 px-4 py-2 text-gray-700"
+        className="flex items-center gap-2 rounded-lg mx-3 bg-gray-100 px-5  py-2 text-black"
       >
+        <DashboardIcon className='text-gray-800 text-2xl'/>
 
-        <span className="text-sm font-medium">Dashboard</span>
+        <span className="text-sm font-semibold ">Dashboard</span>
       </Link>
 
 
       {/*Categories */}
 
-      <Link href={'/categories'}>
+      <Link href={'/employees'}>
       
         <summary
-          className="flex cursor-pointer items-center justify-between rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+          className="flex cursor-pointer items-center justify-between rounded-lg px-4 py-2 mt-5 text-white hover:bg-gray-100 hover:text-gray-700"
         >
           <div className="flex items-center gap-2">
+          <PeopleIcon className='text-gray-500 text-2xl'/>
             
-            <span className="text-sm font-medium">Categories</span>
+            <span className="text-sm font-medium">Employees</span>
           </div>
         </summary>
         </Link>
@@ -44,9 +55,10 @@ export default function Sidebar() {
 
       <details className="group [&_summary::-webkit-details-marker]:hidden">
         <summary
-          className="flex cursor-pointer items-center justify-between rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+          className="flex cursor-pointer items-center justify-between rounded-lg px-4 py-2 text-white hover:bg-gray-100 hover:text-gray-700"
         >
           <div className="flex items-center gap-2">
+            <InventoryIcon className='text-gray-500 text-2xl'/>
             
             <span className="text-sm font-medium">Products</span>
           </div>
@@ -70,7 +82,7 @@ export default function Sidebar() {
         <nav aria-label="Teams Nav" className="mt-2 flex flex-col px-4">
           <Link
             href="/products"
-            className="flex items-center gap-2 rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+            className="flex items-center gap-2 rounded-lg px-4 py-2 text-white hover:bg-gray-100 hover:text-gray-700"
           >
             <span className="text-sm font-medium">Manage Products </span>
           </Link>
@@ -82,9 +94,10 @@ export default function Sidebar() {
 
       <details className="group [&_summary::-webkit-details-marker]:hidden">
         <summary
-          className="flex cursor-pointer items-center justify-between rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+          className="flex cursor-pointer items-center justify-between rounded-lg px-4 py-2 text-white hover:bg-gray-100 hover:text-gray-700"
         >
           <div className="flex items-center gap-2">
+            <PointOfSaleIcon className='text-gray-500 text-2xl'/>
             
             <span className="text-sm font-medium">Sales</span>
           </div>
@@ -108,19 +121,71 @@ export default function Sidebar() {
         <nav aria-label="Teams Nav" className="mt-2 flex flex-col px-4">
           <Link
             href="/sales"
-            className="flex items-center gap-2 rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+            className="flex items-center gap-2 rounded-lg px-4 py-2 text-white hover:bg-gray-100 hover:text-gray-700"
           >
             <span className="text-sm font-medium">Manage Sales </span>
           </Link>
 
-          <Link
-            href="/add_sales"
-            className="flex items-center gap-2 rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
-          >
-            <span className="text-sm font-medium">Add Sales</span>
-          </Link>
+          
         </nav>
       </details>
+
+
+      <details className="group [&_summary::-webkit-details-marker]:hidden">
+        <summary
+          className="flex cursor-pointer items-center justify-between rounded-lg px-4 py-2 text-white hover:bg-gray-100 hover:text-gray-700"
+        >
+          <div className="flex items-center gap-2">
+            <SummarizeIcon className='text-gray-500 text-2xl'/>
+            
+            <span className="text-sm font-medium">Sales Report</span>
+          </div>
+
+          <span className="shrink-0 transition duration-300 group-open:-rotate-180">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fillRule="evenodd"
+                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </span>
+        </summary>
+
+        <nav aria-label="Teams Nav" className="mt-2 flex flex-col px-4">
+          <Link
+            href="/sales"
+            className="flex items-center gap-2 rounded-lg px-4 py-2 text-white hover:bg-gray-100 hover:text-gray-700"
+          >
+            <TodayIcon className='text-gray-500 text-2xl'/>
+
+            <span className="text-sm font-medium">Daily Sales </span>
+          </Link>
+          <Link
+            href="/sales"
+            className="flex items-center gap-2 rounded-lg px-4 py-2 text-white hover:bg-gray-100 hover:text-gray-700"
+          >
+            <CalendarMonthIcon className='text-gray-500 text-2xl'/>
+            <span className="text-sm font-medium">Monthly Sales </span>
+          </Link>
+          <Link
+            href="/sales"
+            className="flex items-center gap-2 rounded-lg px-4 py-2 text-white hover:bg-gray-100 hover:text-gray-700"
+          >
+            <DateRangeIcon className='text-gray-500 text-2xl'/>
+            <span className="text-sm font-medium">Sales by Date </span>
+          </Link>
+
+          
+        </nav>
+      </details>
+
+
 
 
 
@@ -130,23 +195,10 @@ export default function Sidebar() {
 
  <details className="group [&_summary::-webkit-details-marker]:hidden">
         <summary
-          className="flex cursor-pointer items-center justify-between rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+          className="flex cursor-pointer items-center justify-between rounded-lg px-4 py-2 text-white hover:bg-gray-100 hover:text-gray-700 "
         >
           <div className="flex items-center gap-2">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5 opacity-75"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-              />
-            </svg>
+            <ManageAccountsIcon className='text-gray-500 text-2xl'/>
 
             <span className="text-sm font-medium"> Account </span>
           </div>
@@ -170,7 +222,7 @@ export default function Sidebar() {
         <nav aria-label="Account Nav" className="mt-2 flex flex-col px-4">
           <a
             href="#"
-            className="flex items-center gap-2 rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+            className="flex items-center gap-2 rounded-lg px-4 py-2 text-white hover:bg-gray-100 hover:text-gray-700"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -192,7 +244,7 @@ export default function Sidebar() {
 
           <a
             href="#"
-            className="flex items-center gap-2 rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+            className="flex items-center gap-2 rounded-lg px-4 py-2 text-white hover:bg-gray-100 hover:text-gray-700"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -215,7 +267,7 @@ export default function Sidebar() {
           <form action="/logout">
             <button
               type="submit"
-              className="flex w-full items-center gap-2 rounded-lg px-4 py-2 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+              className="flex w-full items-center gap-2 rounded-lg px-4 py-2 text-white hover:bg-gray-100 hover:text-gray-700"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -241,7 +293,7 @@ export default function Sidebar() {
   </div>
 
   <div className="sticky inset-x-0 bottom-0 border-t border-gray-100">
-    <a href="#" className="flex items-center gap-2 bg-white p-4 hover:bg-gray-50">
+    <a href="#" className="flex items-center gap-2 bg-black p-4 hover:bg-gray-50">
       <img
         alt="Man"
         src="https://images.unsplash.com/photo-1600486913747-55e5470d6f40?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
@@ -249,7 +301,7 @@ export default function Sidebar() {
       />
 
       <div>
-        <p className="text-xs">
+        <p className="text-xs text-gray-500">
           <strong className="block font-medium">Eric Frusciante</strong>
 
           <span> eric@frusciante.com </span>

@@ -21,8 +21,8 @@ export default function Layout({ children }: LayoutProps): JSX.Element {
 
       <Navbar/>
       <Sidebar />
-      <main className="ml-[200px] pt-16 ">
-        <div>{children}</div>
+      <main className="ml-[200px] pt-16 bg-gray-200 h-screen">
+        <div className="bg-gray-200">{children}</div>
       </main>
     </>
   );
