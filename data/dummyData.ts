@@ -21,12 +21,24 @@ export const salesData: Sales[] = [
       id: '1',
       title: 'Kuku',
       quantity: 20,
-      amount: 100,
+      amount: 10000,
       date: "24th Feb 2023"
     },
     
     
     
   ];
+
+  {/*export const employeeData: Sales[] = [
+    {
+      id: '1',
+      firstname: 'Kuku',
+      lastname: 20,
+      salary: 300,
+    },
+    
+    
+    
+  ];*/}
   
 
