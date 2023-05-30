@@ -1,5 +1,5 @@
 
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState, useEffect } from 'react';
 import MaterialReactTable, {
   type MaterialReactTableProps,
   type MRT_Cell,
@@ -20,12 +20,10 @@ import {
   Tooltip,
 } from '@mui/material';
 import { Delete, Edit } from '@mui/icons-material';
-import { data} from '@/data/dummyData';
 
 export type Product = {
-  id: string;
+  id: number
   title: string;
-  categories: string;
   instock: number;
   price: number;
   date: string;
@@ -35,44 +33,91 @@ export type Product = {
 export default function ManageProducts() {
 
   const [createModalOpen, setCreateModalOpen] = useState(false);
-  const [tableData, setTableData] = useState<Product[]>(() => data);
+  const [tableData, setTableData] = useState<Product[]>([]);
   const [validationErrors, setValidationErrors] = useState<{
     [cellId: string]: string;
   }>({});
 
-  const handleCreateNewRow = (values: Product) => {
-    tableData.push(values);
-    setTableData([...tableData]);
-  };
+  const apiURL = 'http://localhost:3001'
 
-  const handleSaveRowEdits: MaterialReactTableProps<Product>['onEditingRowSave'] =
-    async ({ exitEditingMode, row, values }) => {
-      if (!Object.keys(validationErrors).length) {
-        tableData[row.index] = values;
-        //send/receive api updates here, then refetch or update local table data for re-render
-        setTableData([...tableData]);
-        exitEditingMode(); //required to exit editing mode and close modal
+//use effect
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`${apiURL}/products`); // Replace 'API_URL' with the actual URL of your API
+        const data = await response.json();
+        setTableData(data);
+      } catch (error) {
+        console.error('Error fetching data from API:', error);
       }
     };
+  
+    fetchData();
+  }, []);
+
+
+
+//create a new product
+  const handleCreateNewRow = async (values: Product) => {
+    try {
+      const response = await fetch(`${apiURL}/products`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(values),
+      });
+      const data = await response.json();
+      const newRow = { ...data, id: data.id };
+      setTableData([...tableData, data]);
+    } catch (error) {
+      console.error('Error creating new row:', error);
+    }
+  };
+  
+//edit product
+  const handleSaveRowEdits: MaterialReactTableProps<Product>['onEditingRowSave'] = async ({ exitEditingMode, row, values }) => {
+    if (!Object.keys(validationErrors).length) {
+      try {
+        const response = await fetch(`${apiURL}/products/${values.id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(values),
+        });
+        const data = await response.json();
+        const updatedProduct = { ...values, id: data.id };
+        tableData[row.index] = data;
+        setTableData([...tableData]);
+        exitEditingMode();
+      } catch (error) {
+        console.error('Error saving row edits:', error);
+      }
+    }
+  };
 
   const handleCancelRowEdits = () => {
     setValidationErrors({});
   };
-
-  const handleDeleteRow = useCallback(
-    (row: MRT_Row<Product>) => {
-      if (
-        !confirm(`Are you sure you want to delete ${row.getValue('firstName')}`)
-      ) {
-        return;
-      }
-      //send api delete request here, then refetch or update local table data for re-render
+  
+//delete product
+  const handleDeleteRow = useCallback(async (row: MRT_Row<Product>) => {
+    if (!confirm(`Are you sure you want to delete ${row.getValue('title')}`)) {
+      return;
+    }
+  
+    try {
+      await fetch(`${apiURL}/products/${row.original.id}`, {
+        method: 'DELETE',
+      });
       tableData.splice(row.index, 1);
       setTableData([...tableData]);
-    },
-    [tableData],
-  );
-
+    } catch (error) {
+      console.error('Error deleting row:', error);
+    }
+  }, [tableData]);
+  
 
   const getCommonEditTextFieldProps = useCallback(
     (
@@ -122,13 +167,6 @@ export default function ManageProducts() {
         accessorKey: 'title',
         header: 'PRODUCT TITLE',
         size: 140,
-        muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
-          ...getCommonEditTextFieldProps(cell),
-        }),
-      },
-      {
-        accessorKey: 'categories',
-        header: 'Categories',
         muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
           ...getCommonEditTextFieldProps(cell),
         }),

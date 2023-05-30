@@ -15,10 +15,10 @@ function Navbar() {
       
 
 
-{/*date */}
+{/*date 
         <div className="text-black ml-44 tracking-wider">
           <strong>{new Date().toLocaleString()}</strong>
-        </div>
+        </div>*/}
 
 
         

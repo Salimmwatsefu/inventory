@@ -4,7 +4,7 @@ import { Sales } from "@/components/Sales/ManageSales";
 
 export const data: Product[] = [
   {
-    id: '1',
+    id: 1,
     title: 'Kuku',
     categories: 'Food',
     instock: 100,

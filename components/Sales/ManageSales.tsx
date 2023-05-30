@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import MaterialReactTable, {
   type MaterialReactTableProps,
   type MRT_Cell,
@@ -19,7 +19,6 @@ import {
   Tooltip,
 } from '@mui/material';
 import { Delete, Edit } from '@mui/icons-material';
-import { salesData} from '@/data/dummyData';
 
 export type Sales = {
   id: string;
@@ -33,44 +32,86 @@ export type Sales = {
 export default function ManageSales() {
 
   const [createModalOpen, setCreateModalOpen] = useState(false);
-  const [tableData, setTableData] = useState<Sales[]>(() => salesData);
+  const [tableData, setTableData] = useState<Sales[]>([]);
   const [validationErrors, setValidationErrors] = useState<{
     [cellId: string]: string;
   }>({});
+  const apiURL = 'http://localhost:3001'
 
-  const handleCreateNewRow = (values: Sales) => {
-    tableData.push(values);
-    setTableData([...tableData]);
-  };
-
-  const handleSaveRowEdits: MaterialReactTableProps<Sales>['onEditingRowSave'] =
-    async ({ exitEditingMode, row, values }) => {
-      if (!Object.keys(validationErrors).length) {
-        tableData[row.index] = values;
-        //send/receive api updates here, then refetch or update local table data for re-render
-        setTableData([...tableData]);
-        exitEditingMode(); //required to exit editing mode and close modal
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`${apiURL}/sales`); // Replace 'API_URL' with the actual URL of your API
+        const data = await response.json();
+        setTableData(data);
+      } catch (error) {
+        console.error('Error fetching data from API:', error);
       }
     };
+  
+    fetchData();
+  }, []);
+
+  //create a new sale
+  const handleCreateNewRow = async (values: Sales) => {
+    try {
+      const response = await fetch(`${apiURL}/sales`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(values),
+      });
+      const data = await response.json();
+      const newRow = { ...data, id: data.id };
+      setTableData([...tableData, data]);
+    } catch (error) {
+      console.error('Error creating new row:', error);
+    }
+  };
+
+  //edit product
+  const handleSaveRowEdits: MaterialReactTableProps<Sales>['onEditingRowSave'] = async ({ exitEditingMode, row, values }) => {
+    if (!Object.keys(validationErrors).length) {
+      try {
+        const response = await fetch(`${apiURL}/sales/${values.id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(values),
+        });
+        const data = await response.json();
+        const updatedSale = { ...values, id: data.id };
+        tableData[row.index] = data;
+        setTableData([...tableData]);
+        exitEditingMode();
+      } catch (error) {
+        console.error('Error saving row edits:', error);
+      }
+    }
+  };
 
   const handleCancelRowEdits = () => {
     setValidationErrors({});
   };
 
-  const handleDeleteRow = useCallback(
-    (row: MRT_Row<Sales>) => {
-      if (
-        !confirm(`Are you sure you want to delete ${row.getValue('title')}`)
-      ) {
-        return;
-      }
-      //send api delete request here, then refetch or update local table data for re-render
+  const handleDeleteRow = useCallback(async (row: MRT_Row<Sales>) => {
+    if (!confirm(`Are you sure you want to delete ${row.getValue('title')}`)) {
+      return;
+    }
+  
+    try {
+      await fetch(`${apiURL}/sales/${row.original.id}`, {
+        method: 'DELETE',
+      });
       tableData.splice(row.index, 1);
       setTableData([...tableData]);
-    },
-    [tableData],
-  );
-
+    } catch (error) {
+      console.error('Error deleting row:', error);
+    }
+  }, [tableData]);
+  
 
   const getCommonEditTextFieldProps = useCallback(
     (
