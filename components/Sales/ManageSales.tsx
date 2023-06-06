@@ -19,6 +19,8 @@ import {
   Tooltip,
 } from '@mui/material';
 import { Delete, Edit } from '@mui/icons-material';
+import { Slide, ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export type Sales = {
   id: string;
@@ -41,9 +43,24 @@ export default function ManageSales() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`${apiURL}/sales`); // Replace 'API_URL' with the actual URL of your API
-        const data = await response.json();
-        setTableData(data);
+        const salesResponse = await fetch(`${apiURL}/sales`);
+        const salesData = await salesResponse.json();
+  
+        // Fetch product titles for each sale
+        const productIds = salesData.map((sale: { product_id: any; }) => sale.product_id).join(',');
+        const productsResponse = await fetch(`${apiURL}/products?ids=${productIds}`);
+        const productsData = await productsResponse.json();
+  
+        // Map product titles to sales based on product_id
+        const salesWithProductTitles = salesData.map((sale: { product_id: any; }) => {
+          const product = productsData.find((product: { id: any; }) => product.id === sale.product_id);
+          return {
+            ...sale,
+            title: product ? product.title : 'Unknown', // Use 'Unknown' if product title is not found
+          };
+        });
+  
+        setTableData(salesWithProductTitles);
       } catch (error) {
         console.error('Error fetching data from API:', error);
       }
@@ -51,50 +68,57 @@ export default function ManageSales() {
   
     fetchData();
   }, []);
+  
 
-  //create a new sale
   const handleCreateNewRow = async (values: Sales) => {
     try {
+      // Fetch the corresponding product based on the title
+      const productResponse = await fetch(`${apiURL}/products?title=${values.title}`);
+      const productData = await productResponse.json();
+      if (productData.length === 0) {
+        throw new Error(`Product not found for title: ${values.title}`);
+      }
+  
+      // Create a new sale with the product's ID and product's name
+      const product = productData[0];
+      const newSale = {
+        ...values,
+        product_id: product.id, // Add the product's ID as product_id
+        title: product.title, // Use the product's name as the title
+      };
+  
       const response = await fetch(`${apiURL}/sales`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(values),
+        body: JSON.stringify(newSale),
       });
       const data = await response.json();
-      const newRow = { ...data, id: data.id };
-      setTableData([...tableData, data]);
+      const newRow = { ...data, id: data.id,  title: product.title };
+      setTableData([...tableData, newRow]);
+      toast.success(`Sale added successfully!`, {
+        position: "bottom-left",
+  autoClose: 3000,
+  hideProgressBar: false,
+  closeOnClick: true,
+  pauseOnHover: true,
+  draggable: true,
+  progress: 0,
+  transition: Slide,
+        style: {
+          backgroundColor: 'white',
+          color: 'black',
+        }
+        });
+  
     } catch (error) {
       console.error('Error creating new row:', error);
     }
   };
+  
+  
 
-  //edit product
-  const handleSaveRowEdits: MaterialReactTableProps<Sales>['onEditingRowSave'] = async ({ exitEditingMode, row, values }) => {
-    if (!Object.keys(validationErrors).length) {
-      try {
-        const response = await fetch(`${apiURL}/sales/${values.id}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(values),
-        });
-        const data = await response.json();
-        const updatedSale = { ...values, id: data.id };
-        tableData[row.index] = data;
-        setTableData([...tableData]);
-        exitEditingMode();
-      } catch (error) {
-        console.error('Error saving row edits:', error);
-      }
-    }
-  };
-
-  const handleCancelRowEdits = () => {
-    setValidationErrors({});
-  };
 
   const handleDeleteRow = useCallback(async (row: MRT_Row<Sales>) => {
     if (!confirm(`Are you sure you want to delete ${row.getValue('title')}`)) {
@@ -149,14 +173,7 @@ export default function ManageSales() {
 
   const columns = useMemo<MRT_ColumnDef<Sales>[]>(
     () => [
-      {
-        accessorKey: 'id',
-        header: 'ID',
-        enableColumnOrdering: false,
-        enableEditing: false, //disable editing on this column
-        enableSorting: false,
-        size: 80,
-      },
+      
       {
         accessorKey: 'title',
         header: 'PRODUCT TITLE',
@@ -211,19 +228,12 @@ export default function ManageSales() {
           },
         }}
         columns={columns}
-        data={tableData}
-        editingMode="modal" //default
+        data={tableData} //default
         enableColumnOrdering
         enableEditing
-        onEditingRowSave={handleSaveRowEdits}
-        onEditingRowCancel={handleCancelRowEdits}
+        
         renderRowActions={({ row, table }) => (
-          <Box sx={{ display: 'flex', gap: '1rem' }}>
-            <Tooltip arrow placement="left" title="Edit">
-              <IconButton onClick={() => table.setEditingRow(row)}>
-                <Edit />
-              </IconButton>
-            </Tooltip>
+          <Box sx={{ alignItems : 'center', display: 'flex', justifyContent: 'center'  }}>
             <Tooltip arrow placement="right" title="Delete">
               <IconButton color="error" onClick={() => handleDeleteRow(row)}>
                 <Delete />
@@ -247,6 +257,7 @@ export default function ManageSales() {
         onClose={() => setCreateModalOpen(false)}
         onSubmit={handleCreateNewRow}
       />
+       <ToastContainer />
     </div>
   );
 };
@@ -280,7 +291,7 @@ export const CreateNewAccountModal = ({
 
   return (
     <Dialog open={open}>
-      <DialogTitle textAlign="center">Create New Account</DialogTitle>
+      <DialogTitle textAlign="center">Create New Sale</DialogTitle>
       <DialogContent>
         <form onSubmit={(e) => e.preventDefault()}>
           <Stack

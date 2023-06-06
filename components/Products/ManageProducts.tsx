@@ -166,6 +166,7 @@ export default function ManageProducts() {
       {
         accessorKey: 'title',
         header: 'PRODUCT TITLE',
+        enableEditing: false,
         size: 140,
         muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
           ...getCommonEditTextFieldProps(cell),
