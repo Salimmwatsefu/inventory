@@ -83,8 +83,8 @@ export default function ManageSales() {
       const product = productData[0];
       const newSale = {
         ...values,
-        product_id: product.id, // Add the product's ID as product_id
         title: product.title, // Use the product's name as the title
+        product_id: product.id, // Add the product's ID as product_id
       };
   
       const response = await fetch(`${apiURL}/sales`, {
@@ -95,28 +95,26 @@ export default function ManageSales() {
         body: JSON.stringify(newSale),
       });
       const data = await response.json();
-      const newRow = { ...data, id: data.id,  title: product.title };
+      const newRow = { ...data, title: product.title };
       setTableData([...tableData, newRow]);
       toast.success(`Sale added successfully!`, {
-        position: "bottom-left",
-  autoClose: 3000,
-  hideProgressBar: false,
-  closeOnClick: true,
-  pauseOnHover: true,
-  draggable: true,
-  progress: 0,
-  transition: Slide,
+        position: 'bottom-left',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: 0,
+        transition: Slide,
         style: {
           backgroundColor: 'white',
           color: 'black',
-        }
-        });
-  
+        },
+      });
     } catch (error) {
       console.error('Error creating new row:', error);
     }
   };
-  
   
 
 
