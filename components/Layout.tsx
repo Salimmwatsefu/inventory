@@ -19,9 +19,10 @@ export default function Layout({ children }: LayoutProps): JSX.Element {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
+
       <Navbar/>
       <Sidebar />
-      <main className="ml-[200px] pt-16 bg-gray-200 h-screen">
+      <main className="lg:ml-[200px] pt-16 bg-gray-200 h-screen !overflow-x-hidden">
         <div className="bg-gray-200">{children}</div>
       </main>
     </>

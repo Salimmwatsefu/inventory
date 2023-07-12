@@ -41,7 +41,7 @@ export default function TremChart1() {
 
   return (
     <div>
-    <Card className="max-w-md ml-10">
+    <Card className="sm:w-[270px] w-[370px] mx-auto">
     <Flex className="space-x-8" justifyContent="start" alignItems="center">
       <Title>Products in Stock</Title>
     </Flex>

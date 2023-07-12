@@ -23,6 +23,7 @@ import { Slide, ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 export type Sales = {
+  product: any;
   id: string;
   title: string;
   quantity: number;

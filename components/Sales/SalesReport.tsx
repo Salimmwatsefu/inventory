@@ -1,8 +1,25 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { DateRangePicker, DateRangePickerValue } from "@tremor/react";
 import { enGB } from "date-fns/locale";
 import { Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from "@mui/material";
-import { Sales } from "./ManageSales";
+
+export type Sales = {
+  id: number;
+  product_id: number;
+  quantity: number;
+  amount: number;
+  date: string;
+};
+
+export type Product = {
+  id: number;
+  title: string;
+  instock: number;
+  price: number;
+  date: string;
+};
+
+const apiURL = "http://localhost:3001";
 
 const ReportPage = () => {
   const [value, setValue] = useState<DateRangePickerValue>([
@@ -12,8 +29,23 @@ const ReportPage = () => {
 
   const [reportData, setReportData] = useState<Sales[]>([]);
   const [reportError, setReportError] = useState<string | null>(null);
+  const [productData, setProductData] = useState<Product[]>([]);
 
-  const handleGenerateReport = () => {
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`${apiURL}/products`);
+        const data = await response.json();
+        setProductData(data);
+      } catch (error) {
+        console.error("Error fetching product data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const handleGenerateReport = async () => {
     const startDate = value[0]?.toLocaleDateString();
     const endDate = value[1]?.toLocaleDateString();
 
@@ -22,30 +54,32 @@ const ReportPage = () => {
       console.log("Selected End Date:", endDate);
       const url = `http://127.0.0.1:3001/sales/report/?start_date=${startDate}&end_date=${endDate}`;
 
-      fetch(url)
-        .then((response) => response.json())
-        .then((data) => {
-          // Process the data or update your state with the fetched data
-          console.log("Fetched data:", data); // Log the fetched data
-          if (data.sales && data.sales.length > 0) {
-            setReportData(data.sales); // Set the sales data in the state
-            setReportError(null); // Clear any previous error
-          } else {
-            setReportData([]); // No sales found, set empty array in the state
-            setReportError("No sales found for the selected date range"); // Set the error message
-          }
-        })
-        .catch((error) => {
-          console.error("Error fetching report:", error);
-          setReportData([]); // Clear any previous data
-          setReportError("Error fetching report. Please try again."); // Set the error message
-        });
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+
+        console.log("Fetched data:", data);
+
+        if (data.sales && data.sales.length > 0) {
+          setReportData(data.sales);
+          setReportError(null);
+        } else {
+          setReportData([]);
+          setReportError("No sales found for the selected date range");
+        }
+      } catch (error) {
+        console.error("Error fetching report:", error);
+        setReportData([]);
+        setReportError("Error fetching report. Please try again.");
+      }
     }
   };
 
   return (
     <div>
-      <h1 className='my-5 text-center font-black text-4xl text-orange-600 tracking-wider uppercase'>Generate Sales Report</h1>
+      <h1 className="my-5 text-center font-black text-4xl text-orange-600 tracking-wider uppercase">
+        Generate Sales Report
+      </h1>
       <DateRangePicker
         className="max-w-md mx-auto"
         value={value}
@@ -54,40 +88,58 @@ const ReportPage = () => {
         dropdownPlaceholder="Select"
       />
       <button
-            className='bg-orange-500 h-10 rounded-2xl hover:bg-orange-700'
-            onClick={handleGenerateReport}
-          >
-            <span className='mx-5 font-bold text-base uppercase'>Generate</span>
-          </button>
-      {/* Display the report data */}
+        className="bg-orange-500 h-10 mt-5 rounded-2xl hover:bg-orange-700 mx-28 sm:mx-[460px]"
+        onClick={handleGenerateReport}
+      >
+        <span className="mx-5 font-bold text-base uppercase">Generate</span>
+      </button>
       {reportData.length > 0 ? (
         <div className="mt-10">
-          <h2 className='my-5 ml-10 font-bold text-2xl text-orange-600 tracking-wider uppercase'>Generated Report</h2>
+          <h2 className="my-5 ml-10 font-bold  text-2xl text-orange-600 tracking-wider uppercase">
+            Generated Report
+          </h2>
           <div className="overflow-x-auto flex items-center justify-center">
             <TableContainer component={Paper}>
               <Table className="bg-red-500">
                 <TableHead>
                   <TableRow className="bg-gray-200">
                     <TableCell>ID</TableCell>
-                    <TableCell>Product ID</TableCell>
+                    <TableCell>Product Title</TableCell>
                     <TableCell>Quantity</TableCell>
                     <TableCell>Amount</TableCell>
                     <TableCell>Date</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {reportData.map((sale, index) => (
-                    <TableRow
-                      key={sale.id}
-                      className={index % 2 === 0 ? 'bg-gray-100' : 'bg-white'}
-                    >
-                      <TableCell className="py-2 px-4 border-b border-l bg-red-700">{sale.id}</TableCell>
-                      <TableCell className="py-2 px-4 border-b">{sale.product_id}</TableCell>
-                      <TableCell className="py-2 px-4 border-b">{sale.quantity}</TableCell>
-                      <TableCell className="py-2 px-4 border-b">{sale.amount}</TableCell>
-                      <TableCell className="py-2 px-4 border-b border-r">{sale.date}</TableCell>
-                    </TableRow>
-                  ))}
+                  {reportData.map((sale, index) => {
+                    const product = productData.find(
+                      (product) => product.id === sale.product_id
+                    );
+                    const productName = product ? product.title : "";
+
+                    return (
+                      <TableRow
+                        key={sale.id}
+                        className={index % 2 === 0 ? "bg-gray-100" : "bg-white"}
+                      >
+                        <TableCell className="py-2 px-4 border-b border-l bg-red-700">
+                          {sale.id}
+                        </TableCell>
+                        <TableCell className="py-2 px-4 border-b">
+                          {productName}
+                        </TableCell>
+                        <TableCell className="py-2 px-4 border-b">
+                          {sale.quantity}
+                        </TableCell>
+                        <TableCell className="py-2 px-4 border-b">
+                          {sale.amount}
+                        </TableCell>
+                        <TableCell className="py-2 px-4 border-b border-r">
+                          {sale.date}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
                 </TableBody>
               </Table>
             </TableContainer>
@@ -96,9 +148,13 @@ const ReportPage = () => {
       ) : (
         <div>
           {reportError ? (
-            <Typography variant="body1" color="error">{reportError}</Typography>
+            <Typography variant="body1" color="error">
+              {reportError}
+            </Typography>
           ) : (
-            <Typography variant="body1">Click "Generate" to generate the report</Typography>
+            <Typography variant="body1" className="mt-5 mx-28 sm:mx-[370px]">
+              Click "Generate" to generate the report
+            </Typography>
           )}
         </div>
       )}

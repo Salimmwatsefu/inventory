@@ -211,7 +211,7 @@ export default function ManageProducts() {
       <h1 className='my-5 text-center font-black text-4xl text-orange-600 tracking-wider uppercase'>ALL Products</h1>
       <div className='mx-5'>
       
-      console.log(tableData)
+      
       <MaterialReactTable
         displayColumnDefOptions={{
           'mrt-row-actions': {

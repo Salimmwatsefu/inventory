@@ -9,7 +9,7 @@ function Navbar() {
   };
 
   return (
-    <header className="bg-white border-b-1 border-white  fixed w-full">
+    <header className="bg-white border-b-1 border-white  fixed w-full z-10 ">
 
         <div className="flex py-5 gap-10 items-center justify-center">
       
