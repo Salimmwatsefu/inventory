@@ -68,7 +68,7 @@ export default function ManageProducts() {
 //create a new product
   const handleCreateNewRow = async (values: Product) => {
     try {
-      const response = await axios.post(`${apiURL}/products`, {
+      const response = await axios.post(`${apiURL}/products`, values, {
         headers: {
           Authorization: `Bearer ${token}`, // Set the token in the Authorization header
         },

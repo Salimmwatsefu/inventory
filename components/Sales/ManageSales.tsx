@@ -25,6 +25,7 @@ import { Slide, ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 export type Sales = {
+  product_id: number;
   product: any;
   id: string;
   title: string;
@@ -85,8 +86,12 @@ export default function ManageSales() {
   const handleCreateNewRow = async (values: Sales) => {
     try {
       // Fetch the corresponding product based on the title
-      const productResponse = await fetch(`${apiURL}/products?title=${values.title}`);
-      const productData = await productResponse.json();
+      const productResponse = await axios.get(`${apiURL}/products?title=${values.title}`,{
+        headers:{
+          Authorization: `Bearer ${token}`
+        }
+      });
+      const productData = productResponse.data;
       if (productData.length === 0) {
         throw new Error(`Product not found for title: ${values.title}`);
       }
@@ -99,7 +104,7 @@ export default function ManageSales() {
         product_id: product.id, // Add the product's ID as product_id
       };
   
-      const response = await axios.post(`${apiURL}/sales`, {
+      const response = await axios.post(`${apiURL}/sales`,newSale, {
         headers: {
           Authorization: `Bearer ${token}`
         },
