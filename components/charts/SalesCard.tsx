@@ -83,7 +83,7 @@ const SalesCard = () => {
           <Flex className="space-x-1">
         <Icon icon={CashIcon} color="green" variant="solid" tooltip="Sum of Sales fot the past 7 days" size="sm" />
         <div>
-          <Text>Amount sold</Text>
+          <Text >Amount sold</Text>
           <Metric>Ksh {totalAmount}</Metric>
           </div>
           </Flex>

@@ -14,13 +14,13 @@ export default function Layout({ children }: LayoutProps): JSX.Element {
   return (
     <>
       <Head>
-        <title>Kuku Hub</title>
+        <title >Kuku Hub</title>
         <meta
           name="description"
-          content="A simple website to show how to use use-shopping-cart"
+          content="An inventory management system"
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/hen.png" type="image/png" />
       </Head>
 
   
