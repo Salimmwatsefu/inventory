@@ -36,7 +36,7 @@ const SalesAreaChart = () => {
     };
 
     fetchChartData();
-  }, []);
+  }, [token]);
 
   const formatChartData = (salesData) => {
     const formattedData = [];

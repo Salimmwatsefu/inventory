@@ -145,7 +145,7 @@ export default function ManageSales() {
     } catch (error) {
       console.error('Error deleting row:', error);
     }
-  }, [tableData]);
+  }, [token, setTableData]);
   
 
   const getCommonEditTextFieldProps = useCallback(

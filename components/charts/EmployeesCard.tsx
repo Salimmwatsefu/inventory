@@ -39,7 +39,7 @@ export default function EmployeesCard() {
     };
 
     fetchEmployeeData();
-  }, []);
+  }, [token]);
 
   return (
     <Card className="lg:w-60 sm:w-56 w-[330px] mx-auto md:mt-0 mt-5  " decoration="top" decorationColor="orange">
