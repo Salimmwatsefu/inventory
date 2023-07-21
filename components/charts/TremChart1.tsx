@@ -26,13 +26,14 @@ export default function TremChart1() {
     const [productData, setProductData] = useState<Product[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 const [error, setError] = useState(null);
+const apiURL = 'https://kuku-hub-ba097a50ef10.herokuapp.com'
 
 const {token} = useContext(AuthContext)
 
     useEffect(() => {
         const fetchData = async () => {
           try {
-            const response = await axios.get('http://localhost:3001/products', {
+            const response = await axios.get(`${apiURL}/products`, {
               headers: {
                 Authorization : `Bearer ${token}`
               }

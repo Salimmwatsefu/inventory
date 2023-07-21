@@ -290,7 +290,7 @@ export default function Sidebar() {
             </a>
           </div>
         ) : (
-          <p>Please login first</p>
+          <p className='font-semibold'>Please login first</p>
         )}
       </div>
       </div>

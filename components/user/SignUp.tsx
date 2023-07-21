@@ -24,6 +24,8 @@ const SignUp: React.FC = () => {
   const [signUpSuccess, setSignUpSuccess] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
+  const apiURL = 'https://kuku-hub-ba097a50ef10.herokuapp.com'
+
 
   const handlePasswordToggle = () => {
     setShowPassword((prevShowPassword) => !prevShowPassword);
@@ -39,7 +41,7 @@ const SignUp: React.FC = () => {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-    axios.post('http://localhost:3001/signup', formData)
+    axios.post(`${apiURL}/signup`, formData)
       .then((response) => {
         // Handle successful sign-up here, e.g., redirect to a different page or show a success message.
         console.log('User created successfully!', response.data);

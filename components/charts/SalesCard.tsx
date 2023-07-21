@@ -11,6 +11,7 @@ const SalesCard = () => {
   const [totalAmount, setTotalAmount] = useState<number>(0);
 
   const {token} = useContext(AuthContext)
+  const apiURL = 'https://kuku-hub-ba097a50ef10.herokuapp.com'
   
 
 
@@ -49,7 +50,7 @@ const SalesCard = () => {
       const startDate = new Date();
       startDate.setDate(endDate.getDate() - 30);
 
-      const url = `http://127.0.0.1:3001/sales/report/?start_date=${startDate.toLocaleDateString()}&end_date=${endDate.toLocaleDateString()}`;
+      const url = `${apiURL}/sales/report/?start_date=${startDate.toLocaleDateString()}&end_date=${endDate.toLocaleDateString()}`;
 
       try {
         const response = await axios.get(url, {

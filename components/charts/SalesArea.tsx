@@ -11,6 +11,7 @@ interface ChartDataItem {
 const SalesAreaChart = () => {
   const [chartData, setChartData] = useState<ChartDataItem[]>([]);
   const {token} = useContext(AuthContext)
+  const apiURL = 'https://kuku-hub-ba097a50ef10.herokuapp.com'
 
   useEffect(() => {
     const fetchChartData = async () => {
@@ -18,7 +19,7 @@ const SalesAreaChart = () => {
         const today = new Date();
         const twelveDaysAgo = new Date();
         twelveDaysAgo.setDate(today.getDate() - 7);
-        const url = `http://127.0.0.1:3001/sales/report/?start_date=${twelveDaysAgo.toLocaleDateString()}&end_date=${today.toLocaleDateString()}`;
+        const url = `${apiURL}/sales/report/?start_date=${twelveDaysAgo.toLocaleDateString()}&end_date=${today.toLocaleDateString()}`;
         const response = await axios.get(url, {
           headers: {
             Authorization: `Bearer ${token}`

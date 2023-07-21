@@ -42,7 +42,7 @@ export default function Employees() {
 
   const { token } = useContext(AuthContext);
 
-  const apiURL = 'http://localhost:3001'
+  const apiURL = 'https://kuku-hub-ba097a50ef10.herokuapp.com'
 
 //use effect
 useEffect(() => {

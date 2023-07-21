@@ -21,6 +21,7 @@ const Login: React.FC = () => {
     e.preventDefault();
     try {
       await login(name, password);
+      closeModals();
     } catch (error) {
       console.log('Error during login:', error);
     }

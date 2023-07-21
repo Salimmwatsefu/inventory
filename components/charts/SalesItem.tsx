@@ -5,7 +5,7 @@ import { Sales } from "../Sales/ManageSales";
 import axios from "axios";
 import { AuthContext } from "../AuthContext";
 
-const apiURL = "http://localhost:3001";
+const apiURL = 'https://kuku-hub-ba097a50ef10.herokuapp.com'
 
 const BarGraph = () => {
   const [productData, setProductData] = useState<Product[]>([]);

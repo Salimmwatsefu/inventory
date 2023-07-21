@@ -21,7 +21,7 @@ export type Product = {
   date: string;
 };
 
-const apiURL = "http://localhost:3001";
+const apiURL = 'https://kuku-hub-ba097a50ef10.herokuapp.com'
 
 
 const ReportPage = () => {
@@ -61,7 +61,7 @@ const ReportPage = () => {
     if (startDate && endDate) {
       console.log("Selected Start Date:", startDate);
       console.log("Selected End Date:", endDate);
-      const url = `http://127.0.0.1:3001/sales/report/?start_date=${startDate}&end_date=${endDate}`;
+      const url = `${apiURL}/sales/report/?start_date=${startDate}&end_date=${endDate}`;
 
       try {
         const response = await axios.get(url, {

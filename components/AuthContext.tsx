@@ -28,6 +28,8 @@ const AuthProvider: React.FC<Props> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
 
+  const apiURL = 'https://kuku-hub-ba097a50ef10.herokuapp.com'
+
   useEffect(() => {
     const storedToken = localStorage.getItem('token');
     if (storedToken) {
@@ -38,22 +40,31 @@ const AuthProvider: React.FC<Props> = ({ children }) => {
 
   const fetchUserData = async (token: string) => {
     try {
-      const response = await axios.get('http://localhost:3001/me', {
+      const response = await axios.get(`${apiURL}/me`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
 
+      console.log('User Data Response:', response.data);
+
       const userData = response.data;
       setUser(userData);
-    } catch (error) {
-      console.log('Error fetching user data:', error);
+      console.log('Request Data:', response.config);
+      console.log('User Data:', userData);
+    } catch (error: any) {
+      if (error.response) {
+        console.log('Error Response Data:', error.response.data);
+        console.log('Error Status:', error.response.status);
+      } else {
+        console.log('Error:', error.message);
+      }
     }
   };
 
   const handleLogin = async (name: string, password: string) => {
     try {
-      const response = await axios.post('http://localhost:3001/login', {
+      const response = await axios.post(`${apiURL}/login`, {
         name,
         password,
       });
@@ -63,6 +74,7 @@ const AuthProvider: React.FC<Props> = ({ children }) => {
       setUser(user);
       setToken(token);
       localStorage.setItem('token', token);
+      
     } catch (error) {
       console.log('Error during login:', error);
       throw new Error('Login failed. Please check your credentials.');

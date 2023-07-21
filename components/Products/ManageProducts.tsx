@@ -41,7 +41,7 @@ export default function ManageProducts() {
     [cellId: string]: string;
   }>({});
 
-  const apiURL = 'http://localhost:3001'
+  const apiURL = 'https://kuku-hub-ba097a50ef10.herokuapp.com'
   const { token } = useContext(AuthContext);
 
 //use effect

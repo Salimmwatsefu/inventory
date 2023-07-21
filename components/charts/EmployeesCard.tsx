@@ -16,7 +16,7 @@ interface Employee {
 export default function EmployeesCard() {
   const [totalEmployees, setTotalEmployees] = useState<number>(0);
   const [totalSalary, setTotalSalary] = useState<number>(0);
-  const apiURL = 'http://localhost:3001'
+  const apiURL = 'https://kuku-hub-ba097a50ef10.herokuapp.com'
   const {token} = useContext(AuthContext)
 
   useEffect(() => {

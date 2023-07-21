@@ -10,7 +10,7 @@ function Navbar() {
         {user ? (
           <p className=" lg:ml-20">Welcome back  <span className=" text-orange-600 font-semibold">{user.name}</span></p>
         ) : (
-          <p>Please login first</p>
+          <p className="font-semibold">Please login first</p>
         )}
       </div>
     </header>
