@@ -1,13 +1,23 @@
-import '@/styles/globals.css'
-import type { AppProps } from 'next/app'
-import Layout from '@/components/Layout'
+// _app.tsx
+import React from 'react';
+import { AppProps } from 'next/app';
+import Layout from '@/components/Layout';
 import NextNProgress from 'nextjs-progressbar';
+import '@/styles/globals.css';
+import  {AuthProvider}  from '@/components/AuthContext';
+import { ModalProvider } from '@/components/ModalContext';
 
-export default function App({ Component, pageProps }: AppProps) {
-  return <Layout>
-     <NextNProgress
-     color='#D76400'
-     /> 
-     <Component {...pageProps} />
+const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => {
+  return (
+    <ModalProvider>
+    <AuthProvider>
+      <Layout>
+        <NextNProgress color="#D76400" />
+        <Component {...pageProps} />
       </Layout>
-}
+    </AuthProvider>
+    </ModalProvider>
+  );
+};
+
+export default MyApp;

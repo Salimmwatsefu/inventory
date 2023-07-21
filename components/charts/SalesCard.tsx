@@ -1,13 +1,16 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Card, Metric, Text, Icon, Flex } from "@tremor/react";
 import { Sales } from "../Sales/ManageSales";
 import { CashIcon, TicketIcon } from "@heroicons/react/outline";
+import axios from "axios";
+import { AuthContext } from "../AuthContext";
 
 const SalesCard = () => {
   const [reportData, setReportData] = useState<Sales[]>([]);
   const [totalQuantity, setTotalQuantity] = useState<number>(0);
   const [totalAmount, setTotalAmount] = useState<number>(0);
 
+  const {token} = useContext(AuthContext)
   
 
 
@@ -30,7 +33,7 @@ const SalesCard = () => {
         quantitySum += sale.quantity;
         amountSum += sale.amount;
       }
-      console.log("Total Quantity:", quantitySum);
+      
 
       setTotalQuantity(quantitySum);
       setTotalAmount(amountSum);
@@ -49,12 +52,15 @@ const SalesCard = () => {
       const url = `http://127.0.0.1:3001/sales/report/?start_date=${startDate.toLocaleDateString()}&end_date=${endDate.toLocaleDateString()}`;
 
       try {
-        const response = await fetch(url);
-        const data = await response.json();
+        const response = await axios.get(url, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        const data = response.data;
 
-        if (response.ok) {
+        if (response.status >= 200 && response.status < 300) {
           setReportData(data.sales || []);
-          console.log("Fetched report data:", data.sales);
         } else {
           setReportData([]);
           console.error("Error fetching report:", data.message);
@@ -66,7 +72,7 @@ const SalesCard = () => {
     };
 
     fetchReportData();
-  }, []);
+  }, [token]);
 
 
   return (

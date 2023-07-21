@@ -1,5 +1,12 @@
-import React, { useState } from 'react';
+import { useContext, useState} from 'react';
 import Link from 'next/link';
+import { AuthContext } from './AuthContext';
+import Modal from './Modal';
+import Login from './user/SignIn';
+import SignUp from './user/SignUp';
+import { useModalContext } from './ModalContext';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+
 import {
   Dashboard as DashboardIcon,
   People as PeopleIcon,
@@ -11,12 +18,21 @@ import {
   Close as CloseIcon,
 } from '@mui/icons-material';
 
+
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
+  const { user } = useContext(AuthContext);
+  
+
+  const { isLoginModalOpen, isSignUpModalOpen, openLoginModal, openSignUpModal, closeModals } =
+    useModalContext();
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
   };
+
+ 
+
 
   return (
     <div>
@@ -193,9 +209,9 @@ export default function Sidebar() {
       </summary>
 
       <nav aria-label="Account Nav" className="mt-2 flex flex-col px-4">
-        <a
-          href="#"
+        <button 
           className="flex items-center gap-2 rounded-lg px-4 py-2 text-white hover:bg-gray-100 hover:text-gray-700"
+          onClick={openLoginModal}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -205,19 +221,16 @@ export default function Sidebar() {
             stroke="currentColor"
             strokeWidth="2"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2"
-            />
+            {/* Icon SVG */}
           </svg>
 
-          <span className="text-sm font-medium"> Details </span>
-        </a>
-
-        <a
-          href="#"
+          <span className="text-sm font-medium"> Login</span>
+        </button>
+        
+      
+        <button 
           className="flex items-center gap-2 rounded-lg px-4 py-2 text-white hover:bg-gray-100 hover:text-gray-700"
+          onClick={openSignUpModal}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -227,15 +240,11 @@ export default function Sidebar() {
             stroke="currentColor"
             strokeWidth="2"
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
-            />
+            {/* Icon SVG */}
           </svg>
 
-          <span className="text-sm font-medium"> Security </span>
-        </a>
+          <span className="text-sm font-medium"> Sign Up</span>
+        </button>
 
         <form action="/logout">
           <button
@@ -266,23 +275,31 @@ export default function Sidebar() {
 </div>
           
 
-        <div className="sticky inset-x-0 bottom-0 border-t border-gray-100">
-          <a href="#" className="flex items-center gap-2 bg-black p-4 hover:bg-gray-50">
-            <img
-              alt="Man"
-              src="https://images.unsplash.com/photo-1600486913747-55e5470d6f40?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
-              className="h-10 w-10 rounded-full object-cover"
-            />
-
-            <div>
-              <p className="text-xs text-gray-500">
-                <strong className="block font-medium">Eric Frusciante</strong>
-                <span> eric@frusciante.com </span>
-              </p>
-            </div>
-          </a>
-        </div>
+<div className="flex py-5 gap-10 items-center justify-center">
+        {user ? (
+          <div className="sticky inset-x-0 bottom-0 border-t border-gray-100">
+            <a href="#" className="flex items-center gap-2 bg-black p-4 hover:bg-gray-50">
+              <AccountCircleIcon className='h-10 w-10'/>
+              <div>
+                <p className='text-xs'>Welcome back</p>
+                <p className="text-xs text-orange-600">
+                  <strong className="block font-medium ">{user.name}</strong>
+                  
+                </p>
+              </div>
+            </a>
+          </div>
+        ) : (
+          <p>Please login first</p>
+        )}
       </div>
+      </div>
+      <Modal onClose={closeModals} isOpen={isLoginModalOpen}>
+        <Login />
+      </Modal>
+      <Modal onClose={closeModals} isOpen={isSignUpModalOpen}>
+        <SignUp />
+      </Modal>
     </div>
   );
 }

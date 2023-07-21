@@ -1,4 +1,6 @@
-import React, { useCallback, useMemo, useState, useEffect } from 'react';
+import React, { useCallback, useMemo, useState, useEffect, useContext } from 'react';
+import axios from 'axios';
+import { AuthContext } from './AuthContext';
 import MaterialReactTable, {
   type MaterialReactTableProps,
   type MRT_Cell,
@@ -38,64 +40,72 @@ export default function Employees() {
     [cellId: string]: string;
   }>({});
 
+  const { token } = useContext(AuthContext);
+
   const apiURL = 'http://localhost:3001'
 
 //use effect
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(`${apiURL}/employees`); // Replace 'API_URL' with the actual URL of your API
-        const data = await response.json();
-        setTableData(data);
-      } catch (error) {
-        console.error('Error fetching data from API:', error);
-      }
-    };
-  
-    fetchData();
-  }, []);
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(`${apiURL}/employees`, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Set the token in the Authorization header
+        },
+      });
+      const data = response.data;
+      setTableData(data);
+    } catch (error) {
+      console.error('Error fetching data from API:', error);
+    }
+  };
+
+  fetchData();
+}, [token]);
 
 
 
 //create a new product
-  const handleCreateNewRow = async (values: Employee) => {
-    try {
-      const response = await fetch(`${apiURL}/employees`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(values),
-      });
-      const data = await response.json();
-      const newRow = { ...data, id: data.id };
-      setTableData([...tableData, data]);
-    } catch (error) {
-      console.error('Error creating new row:', error);
-    }
-  };
+const handleCreateNewRow = async (values: Employee) => {
+  try {
+    const response = await axios.post(`${apiURL}/employees`, values, {
+      headers: {
+        Authorization: `Bearer ${token}`, // Include the token in the request headers
+        'Content-Type': 'application/json',
+      },
+    });
+    const data = response.data;
+    const newRow = { ...data, id: data.id };
+    setTableData([...tableData, data]);
+  } catch (error) {
+    console.error('Error creating new row:', error);
+  }
+};
   
 //edit product
-  const handleSaveRowEdits: MaterialReactTableProps<Employee>['onEditingRowSave'] = async ({ exitEditingMode, row, values }) => {
-    if (!Object.keys(validationErrors).length) {
-      try {
-        const response = await fetch(`${apiURL}/employees/${values.id}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(values),
-        });
-        const data = await response.json();
-        const updatedProduct = { ...values, id: data.id };
-        tableData[row.index] = data;
-        setTableData([...tableData]);
-        exitEditingMode();
-      } catch (error) {
-        console.error('Error saving row edits:', error);
-      }
+const handleSaveRowEdits: MaterialReactTableProps<Employee>['onEditingRowSave'] = async ({
+  exitEditingMode,
+  row,
+  values,
+}) => {
+  if (!Object.keys(validationErrors).length) {
+    try {
+      const response = await axios.put(`${apiURL}/employees/${values.id}`, values, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Include the token in the request headers
+          'Content-Type': 'application/json',
+        },
+      });
+      const data = response.data;
+      const updatedProduct = { ...values, id: data.id };
+      tableData[row.index] = data;
+      setTableData([...tableData]);
+      exitEditingMode();
+    } catch (error) {
+      console.error('Error saving row edits:', error);
     }
-  };
+  }
+};
 
   const handleCancelRowEdits = () => {
     setValidationErrors({});
@@ -108,15 +118,17 @@ export default function Employees() {
     }
   
     try {
-      await fetch(`${apiURL}/employees/${row.original.id}`, {
-        method: 'DELETE',
+      await axios.delete(`${apiURL}/employees/${row.original.id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Include the token in the request headers
+        },
       });
       tableData.splice(row.index, 1);
       setTableData([...tableData]);
     } catch (error) {
       console.error('Error deleting row:', error);
     }
-  }, [tableData]);
+  }, [tableData, token]);;
   
 
   const getCommonEditTextFieldProps = useCallback(
@@ -193,6 +205,7 @@ export default function Employees() {
 
 
   return (
+    
     <div >
       <h1 className='my-5 text-center font-black text-4xl text-orange-600 tracking-wider uppercase'>Employees</h1>
       <div className='mx-5'>

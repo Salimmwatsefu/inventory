@@ -1,12 +1,16 @@
-import Head from "next/head";
-import Navbar from "./Navbar";
-import Sidebar from "./Sidebar";
+import { useState } from 'react';
+import Head from 'next/head';
+import Navbar from './Navbar';
+import Sidebar from './Sidebar';
+
 
 interface LayoutProps {
   children: React.ReactNode;
 }
 
 export default function Layout({ children }: LayoutProps): JSX.Element {
+  
+
   return (
     <>
       <Head>
@@ -19,12 +23,15 @@ export default function Layout({ children }: LayoutProps): JSX.Element {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-
-      <Navbar/>
-      <Sidebar />
-      <main className="lg:ml-[200px] pt-16 bg-gray-200 h-screen !overflow-x-hidden">
-        <div className="bg-gray-200">{children}</div>
-      </main>
+  
+        <>
+          <Navbar />
+          <Sidebar />
+          <main className="lg:ml-[200px] pt-16 bg-gray-200 h-screen !overflow-x-hidden">
+            <div className="bg-gray-200">{children}</div>
+          </main>
+        </>
+      
     </>
   );
 }

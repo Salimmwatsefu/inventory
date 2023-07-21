@@ -1,4 +1,6 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import axios from 'axios';
+import { AuthContext } from '../AuthContext';
 import MaterialReactTable, {
   type MaterialReactTableProps,
   type MRT_Cell,
@@ -40,17 +42,26 @@ export default function ManageSales() {
     [cellId: string]: string;
   }>({});
   const apiURL = 'http://localhost:3001'
+  const {token} = useContext(AuthContext)
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const salesResponse = await fetch(`${apiURL}/sales`);
-        const salesData = await salesResponse.json();
+        const salesResponse = await axios.get(`${apiURL}/sales` , {
+          headers: {
+            Authorization: `Bearer ${token}`, // Set the token in the Authorization header
+          },
+        });
+        const salesData = salesResponse.data;
   
         // Fetch product titles for each sale
         const productIds = salesData.map((sale: { product_id: any; }) => sale.product_id).join(',');
-        const productsResponse = await fetch(`${apiURL}/products?ids=${productIds}`);
-        const productsData = await productsResponse.json();
+        const productsResponse = await axios.get(`${apiURL}/products?ids=${productIds}` , {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        const productsData = productsResponse.data;
   
         // Map product titles to sales based on product_id
         const salesWithProductTitles = salesData.map((sale: { product_id: any; }) => {
@@ -68,7 +79,7 @@ export default function ManageSales() {
     };
   
     fetchData();
-  }, []);
+  }, [token]);
   
 
   const handleCreateNewRow = async (values: Sales) => {
@@ -88,14 +99,13 @@ export default function ManageSales() {
         product_id: product.id, // Add the product's ID as product_id
       };
   
-      const response = await fetch(`${apiURL}/sales`, {
-        method: 'POST',
+      const response = await axios.post(`${apiURL}/sales`, {
         headers: {
-          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
         },
-        body: JSON.stringify(newSale),
+        
       });
-      const data = await response.json();
+      const data = response.data;
       const newRow = { ...data, title: product.title };
       setTableData([...tableData, newRow]);
       toast.success(`Sale added successfully!`, {
@@ -125,8 +135,10 @@ export default function ManageSales() {
     }
   
     try {
-      await fetch(`${apiURL}/sales/${row.original.id}`, {
-        method: 'DELETE',
+      await axios.delete(`${apiURL}/sales/${row.original.id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
       });
       tableData.splice(row.index, 1);
       setTableData([...tableData]);

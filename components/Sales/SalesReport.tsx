@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import axios from "axios";
+import { AuthContext } from "../AuthContext";
 import { DateRangePicker, DateRangePickerValue } from "@tremor/react";
 import { enGB } from "date-fns/locale";
 import { Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from "@mui/material";
@@ -21,11 +23,14 @@ export type Product = {
 
 const apiURL = "http://localhost:3001";
 
+
 const ReportPage = () => {
   const [value, setValue] = useState<DateRangePickerValue>([
     new Date(2022, 1, 1),
     new Date(),
   ]);
+
+  const {token} = useContext(AuthContext)
 
   const [reportData, setReportData] = useState<Sales[]>([]);
   const [reportError, setReportError] = useState<string | null>(null);
@@ -34,8 +39,12 @@ const ReportPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`${apiURL}/products`);
-        const data = await response.json();
+        const response = await axios.get(`${apiURL}/products`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        const data = response.data;
         setProductData(data);
       } catch (error) {
         console.error("Error fetching product data:", error);
@@ -43,7 +52,7 @@ const ReportPage = () => {
     };
 
     fetchData();
-  }, []);
+  }, [token]);
 
   const handleGenerateReport = async () => {
     const startDate = value[0]?.toLocaleDateString();
@@ -55,8 +64,12 @@ const ReportPage = () => {
       const url = `http://127.0.0.1:3001/sales/report/?start_date=${startDate}&end_date=${endDate}`;
 
       try {
-        const response = await fetch(url);
-        const data = await response.json();
+        const response = await axios.get(url, {
+          headers: {
+           Authorization: `Bearer ${token}`
+          },
+        });
+        const data = response.data;
 
         console.log("Fetched data:", data);
 

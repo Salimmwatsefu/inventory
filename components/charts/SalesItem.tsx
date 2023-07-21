@@ -1,19 +1,29 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Card, Title, BarChart, Subtitle } from "@tremor/react";
 import { Product } from "../Products/ManageProducts";
 import { Sales } from "../Sales/ManageSales";
+import axios from "axios";
+import { AuthContext } from "../AuthContext";
 
 const apiURL = "http://localhost:3001";
 
 const BarGraph = () => {
   const [productData, setProductData] = useState<Product[]>([]);
   const [reportData, setReportData] = useState<Sales[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+const [error, setError] = useState(null);
+
+const {token} = useContext(AuthContext)
 
   useEffect(() => {
     const fetchProductData = async () => {
       try {
-        const response = await fetch(`${apiURL}/products`);
-        const data = await response.json();
+        const response = await axios.get(`${apiURL}/products`, {
+          headers: {
+            Authorization : `Bearer ${ token }`
+          }
+        });
+        const data = response.data;
         setProductData(data);
       } catch (error) {
         console.error("Error fetching product data:", error);
@@ -31,8 +41,12 @@ const BarGraph = () => {
       const url = `${apiURL}/sales/report/?start_date=${startDateString}&end_date=${endDateString}`;
 
       try {
-        const response = await fetch(url);
-        const data = await response.json();
+        const response = await axios.get(url, {
+          headers: {
+            'Authorization': `Token ${token}`
+          }
+        });
+        const data = response.data;
         setReportData(data.sales);
       } catch (error) {
         console.error("Error fetching sales report data:", error);
@@ -41,7 +55,9 @@ const BarGraph = () => {
 
     fetchProductData();
     fetchReportData();
-  }, []);
+  }, [token]);
+
+  
 
   const calculateSoldAmount = (product: Product) => {
     const soldAmount = reportData.reduce((total, sale) => {
@@ -63,6 +79,7 @@ const BarGraph = () => {
     return "Ksh " + Intl.NumberFormat().format(number).toString();
   };
 
+  
 
   
 

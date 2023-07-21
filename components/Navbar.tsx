@@ -1,27 +1,17 @@
-import React from "react";
-import { useState } from "react";
+import { useContext } from "react";
+import { AuthContext } from "./AuthContext";
 
 function Navbar() {
-  const [showDropdown, setShowDropdown] = useState(false);
-
-  const toggleDropdown = () => {
-    setShowDropdown(!showDropdown);
-  };
+  const { user } = useContext(AuthContext);
 
   return (
     <header className="bg-white border-b-1 border-white  fixed w-full z-10 ">
-
-        <div className="flex py-5 gap-10 items-center justify-center">
-      
-
-
-{/*date 
-        <div className="text-black ml-44 tracking-wider">
-          <strong>{new Date().toLocaleString()}</strong>
-        </div>*/}
-
-
-        
+      <div className="flex py-5 gap-10 items-center justify-center">
+        {user ? (
+          <p className=" lg:ml-20">Welcome back  <span className=" text-orange-600 font-semibold">{user.name}</span></p>
+        ) : (
+          <p>Please login first</p>
+        )}
       </div>
     </header>
   );

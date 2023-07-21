@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Card, Title, AreaChart } from "@tremor/react";
+import axios from "axios";
+import { AuthContext } from "../AuthContext";
 
 const SalesAreaChart = () => {
   const [chartData, setChartData] = useState([]);
+  const {token} = useContext(AuthContext)
 
   useEffect(() => {
     const fetchChartData = async () => {
@@ -11,13 +14,17 @@ const SalesAreaChart = () => {
         const twelveDaysAgo = new Date();
         twelveDaysAgo.setDate(today.getDate() - 7);
         const url = `http://127.0.0.1:3001/sales/report/?start_date=${twelveDaysAgo.toLocaleDateString()}&end_date=${today.toLocaleDateString()}`;
-        const response = await fetch(url);
-        const data = await response.json();
+        const response = await axios.get(url, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        const data = response.data;
 
-        if (response.ok) {
+        if (response.status >= 200 && response.status < 300) {
           const formattedData = formatChartData(data.sales);
           setChartData(formattedData);
-          console.log("Fetched chart data:", formattedData);
+         
         } else {
           setChartData([]);
           console.error("Error fetching chart data:", data.message);

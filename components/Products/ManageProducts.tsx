@@ -1,5 +1,7 @@
 
-import React, { useCallback, useMemo, useState, useEffect } from 'react';
+import React, { useCallback, useMemo, useState, useEffect, useContext } from 'react';
+import axios from 'axios';
+import { AuthContext } from '../AuthContext';
 import MaterialReactTable, {
   type MaterialReactTableProps,
   type MRT_Cell,
@@ -40,13 +42,18 @@ export default function ManageProducts() {
   }>({});
 
   const apiURL = 'http://localhost:3001'
+  const { token } = useContext(AuthContext);
 
 //use effect
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`${apiURL}/products`); // Replace 'API_URL' with the actual URL of your API
-        const data = await response.json();
+        const response = await axios.get(`${apiURL}/products`, {
+          headers: {
+            Authorization: `Bearer ${token}`, // Set the token in the Authorization header
+          },
+        });
+        const data = response.data;
         setTableData(data);
       } catch (error) {
         console.error('Error fetching data from API:', error);
@@ -54,21 +61,19 @@ export default function ManageProducts() {
     };
   
     fetchData();
-  }, []);
+  }, [token]);
 
 
 
 //create a new product
   const handleCreateNewRow = async (values: Product) => {
     try {
-      const response = await fetch(`${apiURL}/products`, {
-        method: 'POST',
+      const response = await axios.post(`${apiURL}/products`, {
         headers: {
-          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`, // Set the token in the Authorization header
         },
-        body: JSON.stringify(values),
       });
-      const data = await response.json();
+      const data = response.data;
       const newRow = { ...data, id: data.id };
       setTableData([...tableData, data]);
     } catch (error) {
@@ -80,14 +85,12 @@ export default function ManageProducts() {
   const handleSaveRowEdits: MaterialReactTableProps<Product>['onEditingRowSave'] = async ({ exitEditingMode, row, values }) => {
     if (!Object.keys(validationErrors).length) {
       try {
-        const response = await fetch(`${apiURL}/products/${values.id}`, {
-          method: 'PUT',
+        const response = await axios.put(`${apiURL}/products/${values.id}`, values, {
           headers: {
-            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`, // Set the token in the Authorization header
           },
-          body: JSON.stringify(values),
         });
-        const data = await response.json();
+        const data = response.data;
         const updatedProduct = { ...values, id: data.id };
         tableData[row.index] = data;
         setTableData([...tableData]);
@@ -109,15 +112,17 @@ export default function ManageProducts() {
     }
   
     try {
-      await fetch(`${apiURL}/products/${row.original.id}`, {
-        method: 'DELETE',
+      await axios.delete(`${apiURL}/product/${row.original.id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
       });
       tableData.splice(row.index, 1);
       setTableData([...tableData]);
     } catch (error) {
       console.error('Error deleting row:', error);
     }
-  }, [tableData]);
+  }, [tableData, token]);
   
 
   const getCommonEditTextFieldProps = useCallback(

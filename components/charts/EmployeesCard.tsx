@@ -1,6 +1,8 @@
 import { Card, Flex, Icon, Metric, Text } from "@tremor/react";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserGroupIcon } from "@heroicons/react/outline";
+import axios from "axios";
+import { AuthContext } from "../AuthContext";
 
 interface Employee {
   id: number;
@@ -15,13 +17,18 @@ export default function EmployeesCard() {
   const [totalEmployees, setTotalEmployees] = useState<number>(0);
   const [totalSalary, setTotalSalary] = useState<number>(0);
   const apiURL = 'http://localhost:3001'
+  const {token} = useContext(AuthContext)
 
   useEffect(() => {
     // Fetch the employees and calculate the total number and salary
     const fetchEmployeeData = async () => {
       try {
-        const response = await fetch(`${apiURL}/employees`);
-        const data: Employee[] = await response.json();
+        const response = await axios.get(`${apiURL}/employees`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        const data: Employee[] = response.data;
         setTotalEmployees(data.length);
 
        // const salarySum = data.reduce((sum, employee) => sum + employee.salary, 0);
