@@ -3,8 +3,13 @@ import { Card, Title, AreaChart } from "@tremor/react";
 import axios from "axios";
 import { AuthContext } from "../AuthContext";
 
+interface ChartDataItem {
+  date: string;
+  Sales: any;
+}
+
 const SalesAreaChart = () => {
-  const [chartData, setChartData] = useState([]);
+  const [chartData, setChartData] = useState<ChartDataItem[]>([]);
   const {token} = useContext(AuthContext)
 
   useEffect(() => {
@@ -38,7 +43,7 @@ const SalesAreaChart = () => {
     fetchChartData();
   }, [token]);
 
-  const formatChartData = (salesData) => {
+  const formatChartData = (salesData:any) => {
     const formattedData = [];
     const today = new Date();
 
@@ -51,7 +56,7 @@ const SalesAreaChart = () => {
     }
 
     // Group sales by date and calculate total amount
-    const salesByDate = salesData.reduce((acc, sale) => {
+    const salesByDate = salesData.reduce((acc:any, sale:any) => {
       const date = sale.date.split("T")[0];
       if (!acc[date]) {
         acc[date] = {
