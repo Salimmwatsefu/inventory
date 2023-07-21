@@ -166,7 +166,7 @@ const ReportPage = () => {
             </Typography>
           ) : (
             <Typography variant="body1" className="mt-5 mx-28 sm:mx-[370px]">
-              Click "Generate" to generate the report
+              Click Generate to generate the report
             </Typography>
           )}
         </div>
