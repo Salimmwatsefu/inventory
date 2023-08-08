@@ -44,7 +44,7 @@ const SignUp: React.FC = () => {
       .then((response) => {
         // Handle successful sign-up here, e.g., redirect to a different page or show a success message.
         console.log('User created successfully!', response.data);
-        showSuccessToast('User created successfully!, Please Log in');
+        showSuccessToast('Sign up successful!, Please Log in');
       })
       .catch((error) => {
         // Handle sign-up errors here, e.g., show an error message.
