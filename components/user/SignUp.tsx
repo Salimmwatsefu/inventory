@@ -21,7 +21,6 @@ const SignUp: React.FC = () => {
     password_confirmation: '',
   });
   const { openLoginModal, closeModals } = useModalContext();
-  const [signUpSuccess, setSignUpSuccess] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
   const apiURL = 'https://kuku-hub-ba097a50ef10.herokuapp.com'
@@ -45,8 +44,7 @@ const SignUp: React.FC = () => {
       .then((response) => {
         // Handle successful sign-up here, e.g., redirect to a different page or show a success message.
         console.log('User created successfully!', response.data);
-        showSuccessToast('User created successfully!');
-        setSignUpSuccess(true); 
+        showSuccessToast('User created successfully!, Please Log in');
       })
       .catch((error) => {
         // Handle sign-up errors here, e.g., show an error message.
@@ -69,11 +67,6 @@ const SignUp: React.FC = () => {
     });
   };
 
-  useEffect(() => {
-    if (signUpSuccess) {
-      openLoginModal();
-    }
-  }, [signUpSuccess, openLoginModal]);
 
   return (
     <div className='md:ml-10 ml-5 mt-6'>
