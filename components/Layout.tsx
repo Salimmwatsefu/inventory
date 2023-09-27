@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
+import Loading from './Loading';
 
 
 interface LayoutProps {
@@ -9,6 +10,14 @@ interface LayoutProps {
 }
 
 export default function Layout({ children }: LayoutProps): JSX.Element {
+
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 5000);
+  }, []);
   
 
   return (
@@ -23,6 +32,10 @@ export default function Layout({ children }: LayoutProps): JSX.Element {
         <link rel="icon" href="/hen.png" type="image/png" />
       </Head>
 
+      {isLoading && <Loading />}
+
+      {!isLoading && (
+
   
         <>
           <Navbar />
@@ -31,6 +44,7 @@ export default function Layout({ children }: LayoutProps): JSX.Element {
             <div className="bg-gray-200">{children}</div>
           </main>
         </>
+      )}
       
     </>
   );
