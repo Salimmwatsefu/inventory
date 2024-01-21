@@ -5,7 +5,7 @@ import SalesCard from '@/components/charts/SalesCard'
 import SalesAreaChart from '@/components/charts/SalesArea'
 import BarGraph from '@/components/charts/SalesItem'
 
-export default function Home() {
+function Home() {
   return (
     <div className='sm:mx-10'>
       <div className='my-10 sm:flex lg:gap-24 gap-3'>
@@ -30,3 +30,5 @@ export default function Home() {
     </div>
   )
 }
+
+export default Home

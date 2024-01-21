@@ -21,7 +21,7 @@ import {
 
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
-  const { user } = useContext(AuthContext);
+  const { user, logout} = useContext(AuthContext);
   
 
   const { isLoginModalOpen, isSignUpModalOpen, openLoginModal, openSignUpModal, closeModals } =
@@ -68,7 +68,7 @@ export default function Sidebar() {
           </div>
 
           <nav aria-label="Main Nav" className="mt-6 flex flex-col space-y-5">
-            <Link href="/" className="flex items-center gap-2 rounded-lg mx-3 bg-gray-100 px-5 py-2 text-black">
+            <Link href={'/graphs'} className="flex items-center gap-2 rounded-lg mx-3 bg-gray-100 px-5 py-2 text-black">
               <DashboardIcon className="text-gray-800 text-2xl" />
               <span className="text-sm font-semibold">Dashboard</span>
             </Link>
@@ -211,7 +211,7 @@ export default function Sidebar() {
       <nav aria-label="Account Nav" className="mt-2 flex flex-col px-4">
         <button 
           className="flex items-center gap-2 rounded-lg px-4 py-2 text-white hover:bg-gray-100 hover:text-gray-700"
-          onClick={openLoginModal}
+         
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -224,13 +224,14 @@ export default function Sidebar() {
             {/* Icon SVG */}
           </svg>
 
-          <span className="text-sm font-medium"> Login</span>
+          <span className="text-sm font-medium"> My Profile</span>
         </button>
         
       
         <button 
           className="flex items-center gap-2 rounded-lg px-4 py-2 text-white hover:bg-gray-100 hover:text-gray-700"
-          onClick={openSignUpModal}
+          onClick={logout}
+          
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -243,7 +244,7 @@ export default function Sidebar() {
             {/* Icon SVG */}
           </svg>
 
-          <span className="text-sm font-medium"> Sign Up</span>
+          <span className="text-sm font-medium"> Sign Out</span>
         </button>
       </nav>
     </details>
@@ -255,7 +256,10 @@ export default function Sidebar() {
         {user ? (
           <div className="sticky inset-x-0 bottom-0 border-t border-gray-100">
             <a href="#" className="flex items-center gap-2 bg-black p-4 hover:bg-gray-50">
-              <AccountCircleIcon className='h-10 w-10'/>
+            <div className="h-10 w-10 bg-orange-600 text-white flex items-center justify-center rounded-full">
+          {/* Extract the first letter from user.name and capitalize it */}
+          <span className="text-xl font-semibold">{user.name.charAt(0).toUpperCase()}</span>
+        </div>
               <div>
                 <p className='text-xs'>Welcome back</p>
                 <p className="text-xs text-orange-600">
