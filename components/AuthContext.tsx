@@ -82,9 +82,15 @@ const AuthProvider: React.FC<Props> = ({ children }) => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    setUser(null);
-    setToken(null);
+    // Display a confirmation dialog
+    const confirmed = window.confirm("Are you sure you want to sign out?");
+  
+    // If the user clicks "OK" in the confirmation dialog, log out
+    if (confirmed) {
+      localStorage.removeItem('token');
+      setUser(null);
+      setToken(null);
+    }
   };
 
   return (

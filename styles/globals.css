@@ -2,28 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
-.loading {
+.loading-container {
     width: 100%;
-    height: 100%;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
+    background: black
+        url("https://media.giphy.com/media/hL9q5k9dk9l0wGd4e0/giphy.gif") center
+        no-repeat;
+    
   }
   
   .spinner {
-    width: 50px;
-    height: 50px;
-    border: 5px solid #000;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
+    margin-top: -100px;
+    color: beige;
   }
-  
-  @keyframes spin {
-    from {
-      transform: rotate(0deg);
-    }
-    to {
-      transform: rotate(360deg);
-    }
-  }
-  

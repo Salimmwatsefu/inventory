@@ -5,6 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useModalContext } from '../ModalContext';
 import { InputAdornment, IconButton, Input } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
+import Image from 'next/image';
 
 interface FormData {
   name: string;
@@ -69,46 +70,49 @@ const SignUp: React.FC = () => {
 
 
   return (
-    <div className='md:ml-10 ml-5 mt-6'>
-       <h1 className=' font-extrabold text-3xl text-orange-600'>KUKU HUB</h1>
-      <p className=' font-semibold text-2xl mt-3 text-gray-700'>Welcome</p>
+    <div className='flex justify-center items-center'>
+      <div className='bg-white rounded-md w-[55%] flex  gap-20'>
+        <div className='ml-10'>
+
+        
+       <h1 className=' font-extrabold text-3xl text-orange-600 mt-5'>KUKU HUB</h1>
       <p className='text-gray-400 mt-2'>Create an account</p>
       <form onSubmit={handleSubmit} className='mt-3'>
         <div >
-          <label htmlFor="name">Username</label><br/>
           <Input
             type="text"
             name="name"
-            placeholder='John'
+            placeholder='Username'
             value={formData.name}
             color='warning'
             onChange={handleChange}
             required
-            className='bg-gray-100 py-2 pl-6 rounded-sm md:w-72 w-60 mt-3'
+            className='bg-gray-100 py-1.5 pl-6 rounded-sm md:w-72 w-60 mt-3'
           />
         </div>
         <div className='mt-2'>
-          <label htmlFor="email">Email</label><br/>
+         
           <Input
             type="email"
             name="email"
+            placeholder='Email'
             value={formData.email}
             onChange={handleChange}
             color='warning'
             required
-            className='bg-gray-100 py-2 pl-6 rounded-sm md:w-72 w-60 mt-3'
+            className='bg-gray-100 py-1.5 pl-6 rounded-sm md:w-72 w-60 mt-3'
           />
         </div>
         <div className='mt-2'>
-          <label htmlFor="password" >Password</label><br/>
           <Input
              type={showPassword ? 'text' : 'password'}
             name="password"
             value={formData.password}
+            placeholder='Password'
             color='warning'
             onChange={handleChange}
             required
-            className='bg-gray-100 py-2 pl-6 rounded-sm md:w-72 w-60 mt-3'
+            className='bg-gray-100 py-1.5 pl-6 pr-10 rounded-sm md:w-72 w-60 mt-3'
             endAdornment={
               <InputAdornment position="end" variant="standard">
                 <IconButton
@@ -122,15 +126,16 @@ const SignUp: React.FC = () => {
           />
         </div>
         <div className='mt-2'>
-          <label htmlFor="password_confirmation">Confirm Password</label><br/>
+          
           <Input
              type={showPassword ? 'text' : 'password'}
             name="password_confirmation"
             color='warning'
+            placeholder='Confirm Password'
             value={formData.password_confirmation}
             onChange={handleChange}
             required
-            className='bg-gray-100 py-2 pl-6 rounded-sm md:w-72 w-60 mt-3'
+            className='bg-gray-100 py-1.5 pl-6 pr-10 rounded-sm md:w-72 w-60 mt-3'
             endAdornment={
               <InputAdornment position="end" variant="standard">
                 <IconButton
@@ -143,15 +148,25 @@ const SignUp: React.FC = () => {
             }
           />
         </div>
-        <button type="submit" className='bg-slate-50 text-orange-600 hover:bg-orange-600 border hover:text-white transition-all duration-500 text-lg py-3 font-semibold md:w-72 w-60 mt-5  border-orange-600'>Sign Up</button>
-        <p className="text-xs text-gray-500 text-center mt-9 -ml-14">
-          Already have an account?
-          <button onClick={openLoginModal} className="underline text-orange-600 ml-2 font-semibold">
-            Login
-          </button>
-        </p>
+        <div>
+        <button type="submit" className='bg-slate-50 text-orange-600 hover:bg-orange-600 border hover:text-white transition-all duration-500 py-2 rounded-3xl font-semibold md:w-40 w-40 mt-5  border-orange-600'>Sign Up</button>
+        </div>
+        
       </form>
       <ToastContainer />
+      </div>
+
+      <div className=' rounded-md'>
+      <Image
+      src={'https://images.unsplash.com/photo-1576615039667-c7a34b96f505?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'}
+      width={300}
+      height={100}
+      quality={100}
+      alt='image'
+      className = ' rounded-r-md'
+      />
+    </div>
+      </div>
     </div>
   );
 };

@@ -6,9 +6,12 @@ function Navbar() {
 
   return (
     <header className="bg-white border-b-1 border-white  fixed w-full z-10 ">
-      <div className="flex py-5 gap-10 items-center justify-center">
+      <div className="flex py-3 items-end justify-end">
         {user ? (
-          <p className=" lg:ml-20">Welcome back  <span className=" text-orange-600 font-semibold">{user.name}</span></p>
+         <div className="h-14 w-14 mr-14 bg-orange-600 text-white flex items-center justify-center rounded-full">
+         {/* Extract the first letter from user.name and capitalize it */}
+         <span className="text-xl font-semibold">{user.name.charAt(0).toUpperCase()}</span>
+       </div>
         ) : (
           <p className="font-semibold">Please login first</p>
         )}
