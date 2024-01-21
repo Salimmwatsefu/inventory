@@ -1,5 +1,5 @@
 // components/Layout.tsx
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Head from 'next/head';
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
@@ -14,13 +14,13 @@ interface LayoutProps {
 }
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
-  const { user, token } = React.useContext(AuthContext);
+  const { user, token } = useContext(AuthContext);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
     // Check if user and token are present
-    setIsAuthenticated(user && token);
+    setIsAuthenticated(!!user && !!token);
   }, [user, token]);
 
   if (!isAuthenticated) {
