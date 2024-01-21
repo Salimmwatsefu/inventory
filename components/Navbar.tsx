@@ -8,7 +8,7 @@ function Navbar() {
     <header className="bg-white border-b-1 border-white  fixed w-full z-10 ">
       <div className="flex py-3 items-end justify-end">
         {user ? (
-         <div className="h-14 w-14 mr-14 bg-orange-600 text-white flex items-center justify-center rounded-full">
+         <div className="h-14 w-14 md:mr-14 mr-5 bg-orange-600 text-white flex items-center justify-center rounded-full">
          {/* Extract the first letter from user.name and capitalize it */}
          <span className="text-xl font-semibold">{user.name.charAt(0).toUpperCase()}</span>
        </div>

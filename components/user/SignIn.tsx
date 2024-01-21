@@ -39,7 +39,7 @@ const Signin: React.FC = () => {
 
   return (
     <div className='flex justify-center items-center'>
-      <div className=' bg-white rounded-md w-[55%] flex  gap-20'>
+      <div className=' bg-white rounded-md md:w-[55%] w-[80%] md:flex  gap-20 pb-10 md:pb-0.5 mt-28 md:mt-0.5'>
         <div className='ml-10'>
       <h1 className=' font-extrabold text-3xl text-orange-600 mt-10'>KUKU HUB</h1>
       <p className='text-gray-400 mt-2 font-semibold text-lg'>Login</p>
@@ -84,7 +84,7 @@ const Signin: React.FC = () => {
     </form>
     </div>
 
-    <div className=' rounded-md'>
+    <div className=' rounded-md hidden md:block'>
       <Image
       src={'https://images.unsplash.com/photo-1576615039667-c7a34b96f505?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'}
       width={300}
