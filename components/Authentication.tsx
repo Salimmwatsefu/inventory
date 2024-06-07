@@ -20,7 +20,7 @@ const Authentication: React.FC = () => {
   };
 
   return (
-    <div className='bg-gray-300 h-screen pt-16'>
+    <div className='bg-[#1a1616] h-screen pt-16'>
       
       {showSignin ? (
         <Signin />
@@ -28,7 +28,7 @@ const Authentication: React.FC = () => {
         <Signup />
       )}
 
-      <div className="text-sm text-gray-800 text-center mt-9 ">
+      <div className="text-sm text-gray-400 text-center mt-9 ">
         {showSignin ? (
           <>
             Do not have an account?
