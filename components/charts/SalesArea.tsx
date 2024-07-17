@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Card, Title, AreaChart } from "@tremor/react";
 import axios from "axios";
 import { AuthContext } from "../AuthContext";
+import apiURL from "@/api";
 
 interface ChartDataItem {
   date: string;
@@ -11,7 +12,7 @@ interface ChartDataItem {
 const SalesAreaChart = () => {
   const [chartData, setChartData] = useState<ChartDataItem[]>([]);
   const {token} = useContext(AuthContext)
-  const apiURL = 'https://kuku-hub-ba097a50ef10.herokuapp.com'
+
 
   useEffect(() => {
     const fetchChartData = async () => {

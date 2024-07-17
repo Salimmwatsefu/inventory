@@ -23,6 +23,7 @@ import {
 import { Delete, Edit } from '@mui/icons-material';
 import { Slide, ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import apiURL from '@/api';
 
 export type Sales = {
   product_id: number;
@@ -42,7 +43,7 @@ export default function ManageSales() {
   const [validationErrors, setValidationErrors] = useState<{
     [cellId: string]: string;
   }>({});
-  const apiURL = 'https://kuku-hub-ba097a50ef10.herokuapp.com'
+ 
   const {token} = useContext(AuthContext)
 
   useEffect(() => {

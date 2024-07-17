@@ -21,6 +21,7 @@ import {
   Tooltip,
 } from '@mui/material';
 import { Delete, Edit } from '@mui/icons-material';
+import apiURL from '@/api';
 
 export type Employee = {
   id: number
@@ -42,7 +43,7 @@ export default function Employees() {
 
   const { token } = useContext(AuthContext);
 
-  const apiURL = 'https://kuku-hub-ba097a50ef10.herokuapp.com'
+
 
 //use effect
 useEffect(() => {

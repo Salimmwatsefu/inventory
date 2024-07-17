@@ -4,6 +4,7 @@ import { AuthContext } from "../AuthContext";
 import { DateRangePicker, DateRangePickerValue } from "@tremor/react";
 import { enGB } from "date-fns/locale";
 import { Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from "@mui/material";
+import apiURL from "@/api";
 
 export type Sales = {
   id: number;
@@ -21,7 +22,6 @@ export type Product = {
   date: string;
 };
 
-const apiURL = 'https://kuku-hub-ba097a50ef10.herokuapp.com'
 
 
 const ReportPage = () => {

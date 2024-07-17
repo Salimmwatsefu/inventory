@@ -4,6 +4,7 @@ import { Sales } from "../Sales/ManageSales";
 import { CashIcon, TicketIcon } from "@heroicons/react/outline";
 import axios from "axios";
 import { AuthContext } from "../AuthContext";
+import apiURL from "@/api";
 
 const SalesCard = () => {
   const [reportData, setReportData] = useState<Sales[]>([]);
@@ -11,7 +12,7 @@ const SalesCard = () => {
   const [totalAmount, setTotalAmount] = useState<number>(0);
 
   const {token} = useContext(AuthContext)
-  const apiURL = 'https://kuku-hub-ba097a50ef10.herokuapp.com'
+ 
   
 
 

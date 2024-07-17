@@ -23,6 +23,7 @@ import {
 } from '@mui/material';
 import { Delete, Edit } from '@mui/icons-material';
 import Home from '@/pages';
+import apiURL from '@/api';
 
 export type Product = {
   id: number
@@ -41,7 +42,7 @@ export default function ManageProducts() {
     [cellId: string]: string;
   }>({});
 
-  const apiURL = 'https://kuku-hub-ba097a50ef10.herokuapp.com'
+  
   const { token } = useContext(AuthContext);
 
 //use effect

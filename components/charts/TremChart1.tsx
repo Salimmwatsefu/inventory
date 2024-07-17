@@ -19,6 +19,8 @@ import {
     instock: number;
   }
 
+import apiURL from '@/api';
+
 
 
 export default function TremChart1() {
@@ -26,7 +28,7 @@ export default function TremChart1() {
     const [productData, setProductData] = useState<Product[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 const [error, setError] = useState(null);
-const apiURL = 'https://kuku-hub-ba097a50ef10.herokuapp.com'
+
 
 const {token} = useContext(AuthContext)
 

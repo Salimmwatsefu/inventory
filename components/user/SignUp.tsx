@@ -6,6 +6,7 @@ import { useModalContext } from '../ModalContext';
 import { InputAdornment, IconButton, Input } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import Image from 'next/image';
+import apiURL from '@/api';
 
 interface FormData {
   name: string;
@@ -24,7 +25,7 @@ const SignUp: React.FC = () => {
   const { openLoginModal, closeModals } = useModalContext();
   const [showPassword, setShowPassword] = useState(false);
 
-  const apiURL = 'https://kuku-hub-ba097a50ef10.herokuapp.com'
+  
 
 
   const handlePasswordToggle = () => {
