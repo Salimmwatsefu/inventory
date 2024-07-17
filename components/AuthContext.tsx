@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect, ReactNode } from 'react';
 import axios from 'axios';
+import apiURL from '@/api';
 
 interface User {
   id: number;
@@ -28,7 +29,7 @@ const AuthProvider: React.FC<Props> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
 
-  const apiURL = 'https://kuku-hub-ba097a50ef10.herokuapp.com'
+
 
   useEffect(() => {
     const storedToken = localStorage.getItem('token');
